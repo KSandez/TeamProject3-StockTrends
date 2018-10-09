@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Stock Price Analysis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <!-- Our CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Khand:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
+
+    <link rel="shortcut icon" href="http://www.hcrnetwork.com/wp-content/uploads/2016/09/grey_new_seo-41-512.png" type="image/x-icon">
+</head>
+
+
+<style>
+body {
+  height: 100%;
+  padding-top: 70px;
+  margin: 5px;
+  background-color: #0f4b99 !important;
+  font-family: 'Khand';
+  color: white;
+}
+
+p {
+  font-size: 20px;
+  background-color: #0f4b99 !important;
+  }
+
+.font-4 {
+  font-weight: 200;
+  font-size: 30px;
+}
+
+a {
+  color: blue;
+}
+
+h1, h2, h3, h4, h5, h6, p,
+.h1, .h2, .h3, .h4, .h5, .h6, .p,
+.display-1, .display-2, .display-3, .display-4
+.text {
+  line-height: 2;
+  word-break: break-word;
+  word-wrap: break-word; 
+  font-family: 'Khand';
+  color: white;
+}
+
+/* The wrapper contains all of the page's content besides the footer, which is pushed to the bottom of the page */
+.wrapper {
+  position: relative;
+  min-height: 100%;
+  padding-bottom: 5px;
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* The footer is positioned at the bottom of the page */
+.footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  min-height: 100px;
+  background: #4e5d6c;
+}
+
+/* The code styles the text at the bottom of the footer */
+.footer > .bottom {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin-bottom:15px;
+  padding-bottom: 100px;
+  background: black;
+}
+
+/* Adding styles to the aside and filter form */
+
+select {
+  display: round;
+  width: 40rem;
+  padding: 8px;
+  color: black;
+  font-family: 'Orbitron', sans-serif;
+  outline: none;
+}
+
+.loader {
+  margin-top: 20px;
+}
+
+.margin-top-50 {
+  margin-top: 30px;
+}
+
+
+/* input placeholder color changes */
+.form-control::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  color: #588dbd;
+}
+
+.form-control::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #588dbd;
+}
+
+.form-control:-ms-input-placeholder {
+  /* IE 10+ */
+  color: #588dbd;
+}
+
+.form-control:-moz-placeholder {
+  /* Firefox 18- */
+  color: #588dbd;
+}
+/* 
+/* media queries which will only be activated at specific screen sizes */
+@media (max-width: 800px) {
+  #table-area td {
+    font-size: 1em;
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-bottom: 15px;
+  }
+}
+
+
+
+</style>
+
+<body>
+    <!-- NavBar-->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <img class="navbar-brand" src="http://www.hcrnetwork.com/wp-content/uploads/2016/09/grey_new_seo-41-512.png" alt="Stock Prediction" title="" style="height: 5.75rem;">
+                 <a class="navbar-brand font-4" href="https://proj3stock2.herokuapp.com/">Stock Prediction</a>
+            </div>
+        </div>
+    </nav>
+<div class="wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+              <h2>This project is to demonstrate how well our machine learning model of linear regression is predicting.<br>
+            This model is not intented to predict what the stock price will be in the future but wouldn't that be nice?</h2>
+            </div>
+        </div>
+        <div class="row">
+           <div class="col-md-12 text-center">
+                <h3>Select a stock from the drop down menu: &nbsp;&nbsp;</h3>
+            </div>
+        </div>
+        <div class="row">
+           <div class="col-md-12 text-center">
+               <select id="stockPicker" onchange="(this.value)"></select>
+              <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+            <H5></H5>
+            <H6></H6>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- script stuff -->
+
+<script>
+   
+        var data = {{data|tojson}};
+        var acc = {{acc|tojson}};
+        var act = {{act|tojson}};
+        var names = {{names|tojson}};
+        var sent = {{sent|tojson}};
+
+        function init() {
+        // Grab a reference to the dropdown select element
+        var selector = d3.select("#stockPicker");
+
+        selector.append("option").text("SELECT A STOCK")
+       
+        selector.selectAll("option").data(d3.map(acc, function(d){return d;}).keys().sort(d3.ascending))
+        .enter()
+        .append("option")
+        .text(function(d) {return d;})
+        .attr("value", function(d) {
+            return data[d];
+            });
+        }
+
+               
+        init()
+
+        d3.select("#stockPicker")
+        .on("change", function(d) {
+        var selectedText = d3.select('#stockPicker option:checked').text()
+        d3.select('p').remove();
+        graphSomething(selectedText);
+        });
+      
+        
+        function graphSomething(stockName) {
+            var stocks = Object.keys(data[0]);
+            var d3 = Plotly.d3;
+            d3.select('#graph').remove();
+            d3.select('svg').remove();
+            
+            var WIDTH_IN_PERCENT_OF_PARENT = 90,
+                HEIGHT_IN_PERCENT_OF_PARENT = 80;
+
+            var gd3 = d3.select('H6')
+                .append('div')
+                .attr('id','graph')
+                .style({
+                    width: WIDTH_IN_PERCENT_OF_PARENT + '%',
+                    'margin-left': (100 - WIDTH_IN_PERCENT_OF_PARENT) / 2 + '%',
+            
+                    height: HEIGHT_IN_PERCENT_OF_PARENT + 'vh',
+                    'margin-top': (100 - HEIGHT_IN_PERCENT_OF_PARENT) / 2 + 'vh'
+                });
+
+            var gd = gd3.node();    
+            
+            var score = [];
+            var predicted = [];
+            var date = [];
+            var actual = [];
+            for (var j = 0; j < data.length; j++) {
+                var dt = data[j];
+                for (var i = 0; i < stocks.length; i++) {
+                    if (stocks[i] == stockName) {
+                        date.push(dt['Date']);
+                        predicted.push(dt[stocks[i]].toFixed(2));
+                        score.push(parseFloat(acc[stocks[i]]));
+                        actual.push(parseFloat(act[j][stocks[i]]).toFixed(2));
+                    };
+                };
+            };
+            Plotly.plot(gd, [{
+                x: date,
+                y: predicted,
+                marker: {color: 'Teal'},
+                type: 'scatter',
+                name: 'Prediction'
+                },
+                {x: date,
+                y: actual,
+                marker: {color: 'Red'},
+                type: 'scatter',
+                name: 'Actual'
+                }], {
+                title: 'Accuracy Score for ' + names[stockName] + ' is ' + (score[0]*100).toFixed(2) + '%',
+                font: {
+                    size: 12
+                }
+                });
+            window.onresize = function() {  
+                Plotly.Plots.resize(gd);
+            };
+            d3.select("H5")
+            .append('p')
+            .text(sent[stockName])
+            };        
+
+    graphSomething('DIS');
+</script>  
+
+</body>
+
+<footer>
+    <div class="row">
+    <div class="col-md-12 text-center">Stock information provided by Yahoo Financials
+        </div>
+        </div>
+        <br>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em"
+    crossorigin="anonymous"></script>
+
+</html>
