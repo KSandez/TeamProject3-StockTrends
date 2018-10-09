@@ -23,12 +23,29 @@
 body {
   height: 100%;
   padding-top: 70px;
-  margin: 5px;
-  background-image: url('http://www.philipcaruso-story.com/wp-content/uploads/2015/03/High-Frequency-Trading.jpg');
-  background-position: center;
+  margin: 1px;
+  background-color:rgb(3, 3, 58);
   background-size: 100%;
   font-family: 'Khand';
   color: white;
+}
+
+.container {
+  background: 
+    /*linear-gradient(blue 0%, rgb(3, 3, 58) 90%), */
+    linear-gradient(to right, purple 0%, rgb(3, 3, 58) 90%),
+    /* url('http://www.philipcaruso-story.com/wp-content/uploads/2015/03/High-Frequency-Trading.jpg') 90px, */
+    url('https://images.unsplash.com/photo-1500316124030-4cffa46f10f0?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=7c3583c9e0a39944ac510280a55bcc0b&auto=format&fit=crop&w=1950&q=80') 30px;
+  background-blend-mode: screen;
+  background-position: top;
+  }
+
+.navbar-brand {
+    float: left;
+    height: 50px;
+    padding: 15px 15px;
+    font-size: 18px;
+    line-height: 30px;
 }
 
 p {
@@ -38,6 +55,7 @@ p {
 .font-4 {
   font-weight: 200;
   font-size: 30px;
+  color: black;
 }
 
 a {
@@ -48,7 +66,7 @@ h1, h2, h3, h4, h5, h6, p,
 .h1, .h2, .h3, .h4, .h5, .h6, .p,
 .display-1, .display-2, .display-3, .display-4
 .text {
-  line-height: 2;
+  line-height: 1.5;
   word-break: break-word;
   word-wrap: break-word; 
   font-family: 'Khand';
@@ -59,7 +77,10 @@ h1, h2, h3, h4, h5, h6, p,
 .wrapper {
   position: relative;
   min-height: 100%;
-  padding-bottom: 5px;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 1rem;
   font-family: 'Orbitron', sans-serif;
 }
 
@@ -79,7 +100,8 @@ h1, h2, h3, h4, h5, h6, p,
   right: 0;
   bottom: 0;
   left: 0;
-  margin-bottom:15px;
+  margin-top: 2rem;
+  margin-bottom:2rem;
   padding-bottom: 100px;
   background: black;
 }
@@ -88,7 +110,7 @@ h1, h2, h3, h4, h5, h6, p,
 
 select {
   display: round;
-  width: 40rem;
+  width: 30rem;
   padding: 8px;
   color: black;
   font-family: 'Orbitron', sans-serif;
@@ -131,9 +153,10 @@ select {
     font-size: 1em;
     position: relative;
     min-height: 1px;
-    padding-right: 15px;
-    padding-left: 15px;
-    padding-bottom: 15px;
+    padding-top: 5rem;
+    padding-right: 5rem;
+    padding-left: 5rem;
+    padding-bottom:5rem;
   }
 }
 
@@ -143,11 +166,12 @@ select {
 
 <body>
     <!-- NavBar-->
-    <nav class="navbar navbar-default navbar-fixed-top">
+    <nav class="navbar navbar-default navbar-fixed-top" style="background-color: whitesmoke">
         <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <img class="navbar-brand" src="http://www.hcrnetwork.com/wp-content/uploads/2016/09/grey_new_seo-41-512.png" alt="Stock Prediction" title="" style="height: 5.75rem;">
+                <img class="navbar-brand" src="http://www.hcrnetwork.com/wp-content/uploads/2016/09/grey_new_seo-41-512.png" alt="Stock Prediction" 
+                title="" style="height: 5.55rem;">
                  <a class="navbar-brand font-4" href="https://proj3stocks.herokuapp.com/">Stock Prediction</a>
             </div>
         </div>
@@ -222,8 +246,8 @@ select {
             d3.select('#graph').remove();
             d3.select('svg').remove();
             
-            var WIDTH_IN_PERCENT_OF_PARENT = 90,
-                HEIGHT_IN_PERCENT_OF_PARENT = 80;
+            var WIDTH_IN_PERCENT_OF_PARENT = 100,
+                HEIGHT_IN_PERCENT_OF_PARENT = 95;
 
             var gd3 = d3.select('H6')
                 .append('div')
@@ -269,7 +293,7 @@ select {
                 title: 'Accuracy Score for ' + names[stockName] + ' is ' + (score[0]*100).toFixed(2) + '%',
                 font: {
                     size: 12
-                }
+                    }
                 });
             window.onresize = function() {  
                 Plotly.Plots.resize(gd);
@@ -286,10 +310,10 @@ select {
 
 <footer>
     <div class="row">
-    <div class="col-md-12 text-center">Stock information provided by Yahoo Financials
+        <div class="col-md-12 text-center">Stock information provided by Yahoo Financials
         </div>
-        </div>
-        <br>
+    </div>
+    <br>
 </footer>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
