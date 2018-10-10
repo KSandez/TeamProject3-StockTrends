@@ -218,8 +218,6 @@ select {
         // Grab a reference to the dropdown select element
         var selector = d3.select("#stockPicker");
 
-        selector.append("option").text("SELECT A STOCK")
-       
         selector.selectAll("option").data(d3.map(acc, function(d){return d;}).keys().sort(d3.ascending))
         .enter()
         .append("option")
@@ -291,6 +289,7 @@ select {
                 name: 'Actual'
                 }], {
                 title: 'Accuracy Score for ' + names[stockName] + ' is ' + (score[0]*100).toFixed(2) + '%',
+                yaxis: {title: 'Stock Price $'},
                 font: {
                     size: 12
                     }
@@ -303,7 +302,7 @@ select {
             .text(sent[stockName])
             };        
 
-    graphSomething('DIS');
+    graphSomething('BA');
 </script>  
 
 </body>
