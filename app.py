@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
 
 # identify how many days into the future do we want to predict
-future = int(7)
+future = int(30)
 # identify the stocks
 tickers = ['CMCSA', 'V', 'LMT', 'NVDA', 'FB', 'NFLX', 'FOX', 'ORCL', 'TSLA', 'BA']
 names_dict = {'CMCSA':'Comcast', 'V':'Visa', 'LMT':'Lockheed Martin', 'NVDA':'Nivdia', 'FB':'Facebook', 'NFLX':'Netflix', 'FOX':'21st Century Fox', 'ORCL':'Oracle', 'TSLA':'Tesla', 'BA':'Boeing'}
